@@ -1,0 +1,19 @@
+# requirements.txt
+fastapi==0.104.1
+python-multipart==0.0.6
+python-dotenv==1.0.0
+uvicorn==0.23.2
+pypdf==3.17.1
+docx2txt==0.8
+regex>=2022.1.18
+tiktoken==0.8.0
+langchain>=0.0.350
+anthropic>=0.7.1
+openai==1.2.3
+
+#Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+#.\venv\Scripts\activate
+#python -m http.server 8080
+
+#.\venv\Scripts\activate
+#python main.py
