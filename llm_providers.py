@@ -20,15 +20,21 @@ class LLMProvider:
         """
         print(f"Initializing LLMProvider with model: {model}")
         self.client = None
+        self.model = model  # Store the model name
         
         if "claude" in model.lower():
             self.client = anthropic.Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
             print("Initialized Anthropic client")
-        elif model in ["gpt-4", "gpt-3.5-turbo"]:
+        elif model in ["gpt-4o"]:
             self.client = openai.Client(api_key=os.getenv("OPENAI_API_KEY"))
             print("Initialized OpenAI client")
+        else:
+           raise ValueError(f"Unsupported model: {model}")
+           
+        if not self.client:
+           raise ValueError("Failed to initialize LLM client")
 
-    async def generate_completion(
+    def generate_completion(
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
@@ -53,7 +59,7 @@ class LLMProvider:
             
             if "claude" in self.model.lower():
                 print("Using Anthropic API")
-                response = await self.client.messages.create(
+                response = self.client.messages.create(
                     model=self.model,
                     max_tokens=max_tokens,
                     system=system_prompt,
@@ -62,13 +68,13 @@ class LLMProvider:
                 print("Anthropic API response received")
                 return response.content[0].text
             
-            elif self.model in ["gpt-4", "gpt-3.5-turbo"]:
+            elif self.model in ["gpt-4o"]:
                 messages = []
                 if system_prompt:
                     messages.append({"role": "system", "content": system_prompt})
                 messages.append({"role": "user", "content": prompt})
                 
-                response = await self.client.chat.completions.create(
+                response = self.client.chat.completions.create(
                     model=self.model,
                     messages=messages,
                     max_tokens=max_tokens
