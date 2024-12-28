@@ -61,7 +61,7 @@ class MeetingSummarizer:
         """
         
         try:
-            summary = await self.llm.generate_completion(
+            summary = self.llm.generate_completion(
                 prompt=prompt,
                 system_prompt=system_prompt
             )
