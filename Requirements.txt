@@ -21,3 +21,9 @@ openai==1.2.3
 
 #.\venv\Scripts\activate
 #python main.py
+
+#.\venv\Scripts\activate
+#pip list | findstr llama
+#pip install cmake
+#pip install scikit-build
+#pip install llama-cpp-python --verbose
