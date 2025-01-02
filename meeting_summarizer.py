@@ -18,11 +18,12 @@ class MeetingSummarizer:
         """
         self.llm = llm_provider
 
-    async def generate_summary(
+    def generate_summary(
         self,
         transcript: str,
         context: str = "",
-        instructions: Optional[str] = None
+        instructions: Optional[str] = None,
+        max_tokens: int = 4000  # Add max_tokens parameter with a default value
     ) -> str:
         """
         Generate a structured summary of a meeting transcript.
@@ -31,6 +32,7 @@ class MeetingSummarizer:
             transcript (str): The meeting transcript to summarize
             context (str): Additional context or reference material
             instructions (Optional[str]): Custom instructions for summary generation
+            max_tokens (int): Maximum number of tokens in the response
             
         Returns:
             str: Generated meeting summary
@@ -61,10 +63,19 @@ class MeetingSummarizer:
         """
         
         try:
+            print("Sending prompt to LLM...")
+            print(f"System Prompt: {system_prompt}")
+            print(f"Main Prompt: {prompt}")
+            
             summary = self.llm.generate_completion(
                 prompt=prompt,
-                system_prompt=system_prompt
+                system_prompt=system_prompt,
+                max_tokens=max_tokens  # Pass max_tokens to generate_completion
             )
+            
+            print("Received summary from LLM:")
+            print(summary)
+            
             return summary
         except Exception as e:
             raise Exception(f"Error generating summary: {str(e)}")

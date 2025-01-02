@@ -9,7 +9,7 @@ regex>=2022.1.18
 tiktoken==0.8.0
 langchain>=0.0.350
 anthropic>=0.7.1
-openai==1.2.3
+openai==1.5.0
 
 #pip install -r requirements.txt
 #Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -23,6 +23,10 @@ openai==1.2.3
 #python main.py
 
 #.\venv\Scripts\activate
+
+
+
+
 #pip list | findstr llama
 #pip install cmake
 #pip install scikit-build

@@ -2,7 +2,7 @@
 # Import standard libraries
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import List, Optional
 import os
 from dotenv import load_dotenv
@@ -21,6 +21,8 @@ print(f"ANTHROPIC_API_KEY exists: {'ANTHROPIC_API_KEY' in os.environ}")
 print(f"ANTHROPIC_API_KEY length: {len(os.getenv('ANTHROPIC_API_KEY', ''))}")
 print(f"OPENAI_API_KEY exists: {'OPENAI_API_KEY' in os.environ}")
 print(f"OPENAI_API_KEY length: {len(os.getenv('OPENAI_API_KEY', ''))}")
+print(f"DEEPSEEK_API_KEY exists: {'DEEPSEEK_API_KEY' in os.environ}")
+print(f"DEEPSEEK_API_KEY length: {len(os.getenv('DEEPSEEK_API_KEY', ''))}")
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -42,8 +44,15 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 class SummaryRequest(BaseModel):
     transcript: str
     instructions: Optional[str] = None
-    model: str = "claude-3-5-sonnet-20241022"  # Updated default model
+    model: str = "deepseek-chat"  # Default to DeepSeek for faster response times
     reference_docs: Optional[List[str]] = None
+
+    @validator('model')
+    def validate_model(cls, v):
+        allowed_models = ["claude-3-5-sonnet-20241022", "gpt-4o", "deepseek-chat"]
+        if v not in allowed_models:
+            raise ValueError(f"Model must be one of {allowed_models}")
+        return v
 
 @app.post("/api/upload")
 async def upload_files(files: List[UploadFile] = File(...)):
@@ -68,7 +77,7 @@ async def upload_files(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/summarize")
-async def summarize_meeting(request: SummaryRequest):
+def summarize_meeting(request: SummaryRequest):
     """Generate meeting summary using specified LLM"""
     try:
         print(f"Received summarize request with model: {request.model}")
@@ -88,10 +97,16 @@ async def summarize_meeting(request: SummaryRequest):
 
         # Generate summary
         print("Generating summary...")
-        summary = await summarizer.generate_summary(
+        # Add model-specific handling
+        max_tokens = 4000  # Default
+        if request.model == "deepseek-chat":
+            max_tokens = 8192  # DeepSeek supports longer outputs
+                
+        summary = summarizer.generate_summary(
             transcript=request.transcript,
             context=context,
-            instructions=request.instructions
+            instructions=request.instructions,
+            max_tokens=max_tokens  # Pass max_tokens here
         )
         print("Summary generated successfully")
 

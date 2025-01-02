@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meeting Summarizer</title>
+    <title>BespokeAI - Custom Summaries with AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .drag-drop-zone {
@@ -19,8 +19,8 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Meeting Summarizer</h1>
-            <p class="mt-2 text-gray-600">Generate structured meeting notes using AI</p>
+            <h1 class="text-3xl font-bold text-gray-900">BespokeAI</h1>
+            <p class="mt-2 text-gray-600">Generate custom summaries for your meetings with AI</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -32,16 +32,17 @@
                     <select id="llm-select" class="w-full p-2 border rounded">
                         <option value="claude-3-5-sonnet-20241022">Claude 3.5 (Anthropic Sonnet)</option>
                         <option value="gpt-4o">GPT-4o (OpenAI)</option>
+                        <option value="deepseek-chat">DeepSeek V3 (Fast & Powerful)</option>
                     </select>
                 </div>
 
                 <!-- Meeting Transcript -->
                 <div class="bg-white p-6 rounded-lg shadow">
-                    <h2 class="text-lg font-semibold mb-4">Meeting Transcript</h2>
+                    <h2 class="text-lg font-semibold mb-4">Input Document or Meeting Transcript</h2>
                     <textarea 
                         id="transcript"
                         class="w-full h-64 p-3 border rounded resize-none"
-                        placeholder="Paste your meeting transcript here..."></textarea>
+                        placeholder="Paste your document or meeting transcript here..."></textarea>
                 </div>
 
                 <!-- Reference Documents -->
@@ -63,7 +64,7 @@
                     <textarea 
                         id="instructions"
                         class="w-full h-32 p-3 border rounded resize-none"
-                        placeholder="Add any specific instructions for formatting the meeting notes..."></textarea>
+                        placeholder="Add any specific instructions for generating the summary eg you are a financial analyst compiling earnings report..."></textarea>
                 </div>
 
                 <button 
